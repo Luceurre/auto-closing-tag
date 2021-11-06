@@ -56,7 +56,7 @@ Return nil otherwise."
 
 (defun auto-close-tag--find-tag-value-end-pos ()
   "Return tag value end position in the current buffer."
-  (if (equal (char-after) nil)
+  (if (equal (point) (line-end-position))
         (- (current-column) 1)
     (if (eq (char-after) (char-syntax ?\s))
         (- (current-column) 1)
@@ -64,7 +64,6 @@ Return nil otherwise."
         (forward-char)
         (auto-close-tag--find-tag-value-end-pos))))
   )
-
 (defun find-tag-value-end-pos (tag-value-beg-pos)
   "Return tag value end position in the current buffer."
   (save-excursion
@@ -86,9 +85,17 @@ Return nil otherwise."
       (if tag-value
           (insert (s-concat "></" tag-value ">"))
         (insert ">")))
+    (forward-char)
       )
   )
 
+(setq auto-close-tag-keymap (make-sparse-keymap))
+(define-key auto-close-tag-keymap ">" 'auto-close-tag) 
+
+(define-minor-mode auto-close-tag-mode
+  "When auto-close-tag-mode is enabled, pressing > will try to find closest XML tag and close it."
+  :lighter ">"
+  :keymap auto-close-tag-keymap)
 (provide 'auto-closing-tag)
 
 ;;; auto-closing-tag.el ends here
