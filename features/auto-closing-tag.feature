@@ -58,3 +58,14 @@ Feature: Find tag value under point
     """
     <tag />
     """
+
+  Scenario: Current tag is already closed
+    When I insert:
+    """
+    <tag>
+    """
+    And I press "C-c c"
+    Then I should see:
+    """
+    <tag></tag>
+    """

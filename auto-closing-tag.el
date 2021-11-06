@@ -80,14 +80,14 @@ Return nil otherwise."
 (defun auto-close-tag ()
   "Autoclose tag at point."
   (interactive)
+  (save-excursion
   (let* ((tag-value (get-tag-value))
         (closing-tag (s-concat (or (and (equal (char-after) ?>) (and (progn (forward-char) t) "")) ">") "</" tag-value ">")))
-    (save-excursion
-      (message closing-tag)
       (if tag-value
           (insert closing-tag)
         (insert ">")))
-      )
+  )
+  (forward-char)
   )
 
 (setq auto-close-tag-keymap (make-sparse-keymap))
