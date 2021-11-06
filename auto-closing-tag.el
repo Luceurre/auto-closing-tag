@@ -58,7 +58,7 @@ Return nil otherwise."
   "Return tag value end position in the current buffer."
   (if (equal (point) (line-end-position))
         (- (current-column) 1)
-    (if (eq (char-after) (char-syntax ?\s))
+    (if (or (eq (char-after) ?\s) (eq (char-after) ?>))
         (- (current-column) 1)
       (progn
         (forward-char)
@@ -80,12 +80,13 @@ Return nil otherwise."
 (defun auto-close-tag ()
   "Autoclose tag at point."
   (interactive)
-  (let ((tag-value (get-tag-value)))
+  (let* ((tag-value (get-tag-value))
+        (closing-tag (s-concat (or (and (equal (char-after) ?>) (and (progn (forward-char) t) "")) ">") "</" tag-value ">")))
     (save-excursion
+      (message closing-tag)
       (if tag-value
-          (insert (s-concat "></" tag-value ">"))
+          (insert closing-tag)
         (insert ">")))
-    (forward-char)
       )
   )
 
