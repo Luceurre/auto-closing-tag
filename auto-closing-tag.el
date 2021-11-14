@@ -23,7 +23,6 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 ;;; Commentary:
 
 ;; commentary
@@ -31,6 +30,11 @@
 ;;; Code:
 
 (require 's)
+
+(defun auto-closing-tag//find-closing-symbol-position ()
+  "Return closing symbol position in current line if it exists, return nil otherwise."
+  (let ((symbol-pos (s-index-of ">" (thing-at-point 'line t))))
+    (and symbol-pos (and (> symbol-pos (current-column) symbol-pos)))))
 
 (defun find-tag-beg-pos (text)
   "Return tag beginning position in TEXT if a tag exists.
